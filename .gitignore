@@ -3,25 +3,36 @@ node_modules/
 
 # Build output
 dist/
+build/
 *.tsbuildinfo
 
-# Environment (CHỨA SECRET — không commit)
+# Test coverage
+coverage/
+
+# Environment (CHỨA SECRET — KHÔNG commit)
+# Ignore MỌI file .env*, chỉ chừa lại .env.example làm template.
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 
 # Logs
 *.log
 npm-debug.log*
+yarn-error.log
+pnpm-debug.log*
 
-# IDE
+# IDE / Editor
 .vscode/
 .idea/
 *.swp
+*.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
 
 # Prisma
-# (KHÔNG ignore prisma/migrations/ — migration phải commit)
+# (KHÔNG ignore prisma/migrations/ — migration PHẢI commit)
+# Client mặc định generate vào node_modules nên đã được ignore.
+# Nếu đặt generator { output = "..." } ra path khác → thêm path đó vào đây.
