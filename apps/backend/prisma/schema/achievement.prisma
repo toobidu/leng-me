@@ -1,0 +1,18 @@
+// ============================================================
+//  MODEL Achievement  →  bảng "achievements"
+// ============================================================
+model Achievement {
+  id                 Int      @id @default(autoincrement())
+  title              String   @db.VarChar(100)
+  description        String   @db.Text
+  icon_url           String?  @db.VarChar(512)
+  req_condition_json Json // {"type":"total_unlocked","count":N} ...
+  is_title_reward    Boolean  @default(false)
+  created_at         DateTime @default(now())
+
+  // users.current_title_id trỏ về đây (title đang gắn)
+  title_holders     User[]
+  user_achievements UserAchievement[]
+
+  @@map("achievements")
+}

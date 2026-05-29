@@ -1,0 +1,20 @@
+// ============================================================
+//  MODEL RefreshToken  →  bảng "refresh_tokens"  (JWT rotation & revocation)
+//  Chỉ lưu SHA-256 của token thực — KHÔNG lưu plain.
+// ============================================================
+model RefreshToken {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  token_hash String    @unique @db.VarChar(255)
+  expires_at DateTime
+  revoked    Boolean   @default(false)
+  revoked_at DateTime?
+  user_agent String?   @db.VarChar(512)
+  ip_address String?   @db.VarChar(45) // IPv4 hoặc IPv6
+  created_at DateTime  @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("refresh_tokens")
+}

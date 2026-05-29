@@ -1,0 +1,18 @@
+// ============================================================
+//  MODEL StudySession  →  bảng "study_sessions"  (phiên học)
+// ============================================================
+model StudySession {
+  id             Int       @id @default(autoincrement())
+  user_id        Int
+  started_at     DateTime  @default(now())
+  ended_at       DateTime?
+  cards_reviewed Int       @default(0)
+  cards_correct  Int       @default(0)
+  exp_earned     Int       @default(0)
+
+  user        User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  review_logs ReviewLog[]
+
+  @@index([user_id, started_at])
+  @@map("study_sessions")
+}

@@ -1,0 +1,21 @@
+// ============================================================
+//  MODEL UserRole  →  bảng "user_roles"  (M-N: users ↔ roles)
+// ============================================================
+//  Tham chiếu User 2 lần: thành viên (user_id) + người gán (assigned_by)
+//  → phải đặt tên quan hệ khớp với phía User.
+// ============================================================
+model UserRole {
+  user_id     Int
+  role_id     Int
+  assigned_at DateTime @default(now())
+  assigned_by Int? // Admin nào gán (ON DELETE SET NULL)
+
+  user     User  @relation("UserRoleMember", fields: [user_id], references: [id], onDelete: Cascade)
+  role     Role  @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  assigner User? @relation("UserRoleAssignedBy", fields: [assigned_by], references: [id], onDelete: SetNull)
+
+  @@id([user_id, role_id])
+  @@index([user_id])
+  @@index([role_id])
+  @@map("user_roles")
+}

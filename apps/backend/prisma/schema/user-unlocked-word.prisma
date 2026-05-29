@@ -1,0 +1,17 @@
+// ============================================================
+//  MODEL UserUnlockedWord  →  bảng "user_unlocked_words"
+//  Ghi nhận user đã MỞ KHOÁ từ nào (khác với học thuộc → xem UserWordProgress).
+// ============================================================
+model UserUnlockedWord {
+  user_id     Int
+  word_id     Int
+  unlocked_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  word Word @relation(fields: [word_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, word_id])
+  @@index([user_id])
+  @@index([word_id])
+  @@map("user_unlocked_words")
+}

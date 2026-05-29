@@ -1,0 +1,41 @@
+// ============================================================
+//  MODEL Word  →  bảng "words"
+//  Bao gồm: từ thực, modifier card, grammar placeholder,
+//           intermediate token (chỉ dùng để fusion tiếp).
+// ============================================================
+model Word {
+  id              Int       @id @default(autoincrement())
+  text            String    @unique @db.VarChar(255)
+  meaning         String    @db.Text
+  example_en      String?   @db.Text
+  example_vi      String?   @db.Text
+  level_code      CefrLevel
+  tier            WordTier
+  token_type      TokenType @default(BASIC_WORD)
+  is_starter      Boolean   @default(false)
+  is_intermediate Boolean   @default(false)
+  display_in_book Boolean   @default(true)
+  image_url       String?   @db.VarChar(512)
+  audio_url       String?   @db.VarChar(512)
+  effect_tag      String?   @db.VarChar(50)
+  created_at      DateTime  @default(now())
+  // CHECK chk_intermediate_display: NOT (is_intermediate AND display_in_book) — migration tay
+
+  // ─── Recipe tham chiếu Word 3 LẦN → bắt buộc đặt tên quan hệ ──
+  recipes_as_ingredient1 Recipe[] @relation("Ingredient1")
+  recipes_as_ingredient2 Recipe[] @relation("Ingredient2")
+  recipes_as_result      Recipe[] @relation("RecipeResult")
+
+  // ─── Back relations khác (1 quan hệ/model → không cần tên) ───
+  topics        WordTopic[]
+  unlocked_by   UserUnlockedWord[]
+  board_states  BoardState[]
+  word_progress UserWordProgress[]
+  review_logs   ReviewLog[]
+  notes         UserWordNote[]
+  fusion_events FusionEvent[] // fusion_events.result_id
+
+  @@index([tier])
+  @@index([level_code])
+  @@map("words")
+}

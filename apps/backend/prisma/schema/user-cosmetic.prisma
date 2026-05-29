@@ -1,0 +1,15 @@
+// ============================================================
+//  MODEL UserCosmetic  →  bảng "user_cosmetics"  (M-N: users ↔ cosmetics)
+// ============================================================
+model UserCosmetic {
+  user_id     Int
+  cosmetic_id Int
+  acquired_at DateTime @default(now())
+
+  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  cosmetic Cosmetic @relation(fields: [cosmetic_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, cosmetic_id])
+  @@index([user_id])
+  @@map("user_cosmetics")
+}

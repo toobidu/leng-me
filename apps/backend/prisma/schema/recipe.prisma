@@ -1,0 +1,32 @@
+// ============================================================
+//  MODEL Recipe  →  bảng "recipes"  (công thức hợp thể 2 nguyên liệu)
+// ============================================================
+//  3 FK trỏ về Word → bắt buộc 3 tên quan hệ riêng.
+//  Quy ước ingredient_1_id < ingredient_2_id do trigger DB xử lý.
+// ============================================================
+model Recipe {
+  id              Int          @id @default(autoincrement())
+  ingredient_1_id Int
+  ingredient_2_id Int
+  result_id       Int
+  source          RecipeSource @default(CURATED)
+  status          RecipeStatus @default(APPROVED)
+  use_count       Int          @default(0)
+  reviewed_by     Int?
+  reviewed_at     DateTime?
+  created_at      DateTime     @default(now())
+  // CHECK (ingredient_1_id < ingredient_2_id) — migration tay
+
+  ingredient_1 Word  @relation("Ingredient1", fields: [ingredient_1_id], references: [id], onDelete: Cascade)
+  ingredient_2 Word  @relation("Ingredient2", fields: [ingredient_2_id], references: [id], onDelete: Cascade)
+  result       Word  @relation("RecipeResult", fields: [result_id], references: [id], onDelete: Cascade)
+  reviewer     User? @relation(fields: [reviewed_by], references: [id], onDelete: SetNull)
+
+  chains        RecipeChain[]
+  fusion_events FusionEvent[]
+
+  @@unique([ingredient_1_id, ingredient_2_id])
+  @@index([result_id])
+  @@index([status])
+  @@map("recipes")
+}

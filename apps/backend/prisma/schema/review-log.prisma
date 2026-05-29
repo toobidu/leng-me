@@ -1,0 +1,21 @@
+// ============================================================
+//  MODEL ReviewLog  →  bảng "review_logs"  (lịch sử từng lần lật thẻ)
+// ============================================================
+model ReviewLog {
+  id              BigInt   @id @default(autoincrement())
+  user_id         Int
+  word_id         Int
+  session_id      Int?
+  rating          Int      @db.SmallInt // 0=Again,1=Hard,2=Good,3=Easy (CHECK 0..3 — migration tay)
+  interval_before Int?
+  interval_after  Int?
+  reviewed_at     DateTime @default(now())
+
+  user    User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  word    Word          @relation(fields: [word_id], references: [id], onDelete: Cascade)
+  session StudySession? @relation(fields: [session_id], references: [id], onDelete: SetNull)
+
+  @@index([user_id, reviewed_at])
+  @@index([word_id])
+  @@map("review_logs")
+}

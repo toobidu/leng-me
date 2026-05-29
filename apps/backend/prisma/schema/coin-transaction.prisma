@@ -1,0 +1,18 @@
+// ============================================================
+//  MODEL CoinTransaction  →  bảng "coin_transactions"
+//  amount: dương = nhận, âm = tiêu. Trigger DB tự cộng vào users.coin_balance.
+// ============================================================
+model CoinTransaction {
+  id         Int        @id @default(autoincrement())
+  user_id    Int
+  amount     Int
+  type       CoinTxType
+  reason     String     @db.VarChar(100) // 'QUEST_REWARD','HINT_USED','COSMETIC_PURCHASE'...
+  ref_id     Int? // FK tuỳ context (không ràng buộc cứng)
+  created_at DateTime   @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id, created_at])
+  @@map("coin_transactions")
+}

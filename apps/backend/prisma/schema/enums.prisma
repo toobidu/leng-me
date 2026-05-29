@@ -1,0 +1,79 @@
+// ============================================================
+//  ENUMS  (≈ CREATE TYPE ... AS ENUM trong Postgres)
+//  Tên enum: PascalCase + @@map về tên type snake_case dưới DB.
+//  Giá trị: giữ nguyên UPPER_CASE khớp y hệt SQL.
+// ============================================================
+
+enum CefrLevel {
+  A1
+  A2
+  B1
+  B2
+  C1
+  C2
+  NATIVE
+
+  @@map("cefr_level")
+}
+
+enum WordTier {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+  MYTHIC
+
+  @@map("word_tier")
+}
+
+enum TokenType {
+  BASIC_WORD
+  COMPOUND_WORD
+  PHRASAL_VERB
+  GRAMMAR_STRUCTURE
+  IDIOM
+  PREFIX
+  SUFFIX
+  MODIFIER_CARD
+  INTERMEDIATE_TOKEN
+
+  @@map("token_type")
+}
+
+enum RecipeSource {
+  CURATED
+  AI_GENERATED
+
+  @@map("recipe_source")
+}
+
+enum RecipeStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@map("recipe_status")
+}
+
+enum CosmeticType {
+  BOARD_THEME
+  CARD_SKIN
+  EFFECT_PACK
+  AVATAR_FRAME
+
+  @@map("cosmetic_type")
+}
+
+enum CoinTxType {
+  EARN
+  SPEND
+
+  @@map("coin_tx_type")
+}
+
+enum QuestResetType {
+  DAILY
+  WEEKLY
+
+  @@map("quest_reset_type")
+}

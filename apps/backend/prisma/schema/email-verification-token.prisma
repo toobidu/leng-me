@@ -1,0 +1,17 @@
+// ============================================================
+//  MODEL EmailVerificationToken  →  bảng "email_verification_tokens"
+//  Chỉ lưu SHA-256, không lưu plain.
+// ============================================================
+model EmailVerificationToken {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  token_hash String    @unique @db.VarChar(255)
+  expires_at DateTime
+  used_at    DateTime?
+  created_at DateTime  @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("email_verification_tokens")
+}

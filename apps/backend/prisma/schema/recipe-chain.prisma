@@ -1,0 +1,17 @@
+// ============================================================
+//  MODEL RecipeChain  →  bảng "recipe_chains"
+//  Chuỗi nhiều bước tạo ra 1 idiom (mỗi step trỏ tới 1 recipe).
+// ============================================================
+model RecipeChain {
+  id          Int     @id @default(autoincrement())
+  chain_group String  @db.VarChar(100) // 'CHAIN_BITE_THE_BULLET'
+  step_order  Int     @db.SmallInt
+  recipe_id   Int
+  hint_text   String? @db.Text
+
+  recipe Recipe @relation(fields: [recipe_id], references: [id], onDelete: Cascade)
+
+  @@unique([chain_group, step_order])
+  @@index([chain_group])
+  @@map("recipe_chains")
+}

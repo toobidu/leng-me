@@ -1,0 +1,18 @@
+// ============================================================
+//  MODEL DailyQuest  →  bảng "daily_quests"
+// ============================================================
+model DailyQuest {
+  id             Int            @id @default(autoincrement())
+  title          String         @db.VarChar(100)
+  description    String         @db.Text
+  reset_type     QuestResetType @default(DAILY)
+  condition_json Json
+  coin_reward    Int            @default(0)
+  exp_reward     Int            @default(0)
+  is_active      Boolean        @default(true)
+  created_at     DateTime       @default(now())
+
+  user_daily_quests UserDailyQuest[]
+
+  @@map("daily_quests")
+}

@@ -1,0 +1,15 @@
+// ============================================================
+//  MODEL Role  →  bảng "roles"  (RBAC)
+// ============================================================
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(50) // 'ADMIN' | 'USER' | 'CONTENT_EDITOR' | 'MODERATOR'
+  description String?  @db.Text
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+
+  // Back-relation M-N qua bảng nối UserRole (Role bị tham chiếu 1 lần → không cần đặt tên)
+  user_roles UserRole[]
+
+  @@map("roles")
+}

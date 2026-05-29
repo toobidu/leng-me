@@ -1,0 +1,27 @@
+{
+  "name": "leng-me",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Monorepo: Express + Prisma backend + Angular frontend + shared types",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n BE,FE -c green,blue \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "npm run dev -w backend",
+    "dev:frontend": "npm run start -w frontend",
+    "build": "npm run build -w @leng/shared && npm run build -w backend && npm run build -w frontend",
+    "typecheck": "npm run typecheck -w backend",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
+    "db:migrate": "npm --workspace backend exec -- prisma migrate dev",
+    "db:reset": "npm --workspace backend exec -- prisma migrate reset",
+    "db:studio": "npm --workspace backend exec -- prisma studio",
+    "db:generate": "npm --workspace backend exec -- prisma generate"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

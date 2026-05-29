@@ -1,0 +1,24 @@
+// ============================================================
+//  MODEL UserWordProgress  →  bảng "user_word_progress"
+//  SRS spaced-repetition (SM-2) — LÕI của chức năng flashcard.
+// ============================================================
+model UserWordProgress {
+  user_id          Int
+  word_id          Int
+  ease_factor      Float     @default(2.5) @db.Real // CHECK (>= 1.3) — migration tay
+  interval_days    Int       @default(0)
+  repetitions      Int       @default(0)
+  due_at           DateTime  @default(now()) // hạn ôn kế tiếp
+  last_reviewed_at DateTime?
+  correct_count    Int       @default(0)
+  wrong_count      Int       @default(0)
+  is_mastered      Boolean   @default(false)
+  created_at       DateTime  @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  word Word @relation(fields: [word_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, word_id])
+  @@index([user_id, due_at]) // query "thẻ đến hạn ôn hôm nay"
+  @@map("user_word_progress")
+}

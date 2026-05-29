@@ -1,0 +1,198 @@
+{
+  // ============================================================
+  //  TSCONFIG TEMPLATE — Node.js / Express API (Senior level)
+  //  Tài liệu chính thức: https://www.typescriptlang.org/tsconfig
+  // ============================================================
+  "compilerOptions": {
+    // ─────────────────────────────────────────────────────────
+    //  1) TARGET & MODULE — Phiên bản JS đầu ra + hệ module
+    // ─────────────────────────────────────────────────────────
+
+    // Phiên bản ECMAScript mà compiler sẽ "hạ cấp" code về.
+    // ES2022 = Node 18+ đã hỗ trợ đầy đủ (top-level await, class fields, .at()...).
+    // Đừng để ES2016 trừ khi phải chạy trên Node rất cũ.
+    "target": "ES2022",
+
+    // Hệ thống module dùng cho file output.
+    // - "NodeNext"  → CHUẨN MỚI cho Node 16+. TS tự quyết CJS/ESM dựa trên
+    //                  field "type" trong package.json. (KHUYẾN NGHỊ).
+    // - "commonjs"  → Cố định CJS. Lựa chọn cũ — hợp lệ nhưng đã legacy.
+    // - "ESNext"    → Khi muốn output ESM thuần (cần "type": "module").
+    //
+    // Lưu ý: với "NodeNext" + package.json KHÔNG có "type": "module"
+    // → toàn bộ file vẫn compile ra CommonJS như cũ. Không cần đổi import.
+    "module": "NodeNext",
+
+    // Bộ thư viện built-in mà TS biết tới (DOM, ES features, ...).
+    // Backend Node thì KHÔNG cần "DOM" — chỉ cần ES2022 là đủ.
+    "lib": ["ES2022"],
+
+    // Khai báo TƯỜNG MINH các package @types muốn nạp vào global scope.
+    // Cần "node" để có process, console, Buffer, __dirname, ... khi backend.
+    // Không khai báo thì với moduleResolution=NodeNext, TS có thể bỏ sót.
+    "types": ["node"],
+
+    // Cách TS tìm module khi gặp import. Phải khớp với "module" ở trên.
+    // - "NodeNext"  → Đi cặp với module: NodeNext. (KHUYẾN NGHỊ)
+    // - "Bundler"   → Khi dùng Webpack/Vite/esbuild — không hợp với commonjs.
+    // - "node10"    → Cách cũ (alias của "node"), đã bị deprecate ở TS 5.
+    "moduleResolution": "NodeNext",
+
+    // ─────────────────────────────────────────────────────────
+    //  2) PATH & OUTPUT — Cấu trúc thư mục
+    // ─────────────────────────────────────────────────────────
+
+    // Thư mục chứa file .js sau khi build.
+    "outDir": "./dist",
+
+    // Thư mục gốc của source code .ts.
+    // TS sẽ giữ nguyên cấu trúc folder từ rootDir sang outDir.
+    "rootDir": "./src",
+
+    // Path alias — viết "@/utils/logger" thay vì "../../../utils/logger".
+    // Lưu ý:
+    //   • Từ TS 4.1+ KHÔNG cần "baseUrl" nữa — đường dẫn trong "paths"
+    //     resolve relative so với chính tsconfig.json.
+    //   • "baseUrl" đã bị deprecate ở TS 5+, sẽ bỏ hẳn ở TS 7.
+    //   • ts-node/ts-node-dev cần thêm "tsconfig-paths" để chạy được alias lúc runtime
+    //     (cài: npm i -D tsconfig-paths, rồi thêm -r tsconfig-paths/register).
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    // ─────────────────────────────────────────────────────────
+    //  3) INTEROP — Tương tác giữa CommonJS và ES Module
+    // ─────────────────────────────────────────────────────────
+
+    // Cho phép viết `import express from "express"` (default import) với package CJS.
+    // GẦN NHƯ LUÔN bật khi làm Node + thư viện npm cũ.
+    "esModuleInterop": true,
+
+    // Đi kèm với esModuleInterop — cho phép default import ngay cả khi
+    // module gốc không có default export. Chủ yếu để type-check, không ảnh hưởng runtime.
+    "allowSyntheticDefaultImports": true,
+
+    // Cho phép `import config from "./config.json"`. Rất hay dùng.
+    "resolveJsonModule": true,
+
+    // Bắt lỗi nếu casing tên file không khớp giữa import và file thật.
+    // Cực kỳ quan trọng khi team có cả người Windows (không phân biệt hoa thường)
+    // và Linux/macOS (phân biệt) — tránh "chạy máy tôi OK mà CI fail".
+    "forceConsistentCasingInFileNames": true,
+
+    // Đảm bảo mỗi file .ts có thể compile độc lập (không phụ thuộc thông tin
+    // type từ file khác lúc transpile). BẮT BUỘC khi dùng ts-node-dev, swc, esbuild.
+    "isolatedModules": true,
+
+    // ─────────────────────────────────────────────────────────
+    //  4) STRICT MODE — Type checking nghiêm ngặt (CỐT LÕI)
+    // ─────────────────────────────────────────────────────────
+
+    // Bật TẤT CẢ các option strict bên dưới cùng lúc.
+    // Đây là dòng quan trọng nhất — định nghĩa "viết TS đúng nghĩa".
+    "strict": true,
+
+    // Các option dưới đây ĐÃ được "strict: true" bật sẵn,
+    // ghi rõ ra để bạn biết bên trong nó gồm những gì:
+    "noImplicitAny": true,              // Cấm để type "any" ngầm định
+    "strictNullChecks": true,           // null và undefined phải xử lý tường minh
+    "strictFunctionTypes": true,        // Kiểm tra type tham số hàm chặt hơn
+    "strictBindCallApply": true,        // .bind/.call/.apply phải đúng kiểu
+    "strictPropertyInitialization": true, // Property của class phải được khởi tạo
+    "noImplicitThis": true,             // Cấm "this" có kiểu any ngầm định
+    "alwaysStrict": true,               // Tự thêm "use strict" vào mọi file
+
+    // ─────────────────────────────────────────────────────────
+    //  5) ADDITIONAL CHECKS — Vượt khỏi strict mặc định (level senior)
+    // ─────────────────────────────────────────────────────────
+
+    // Báo lỗi biến local khai báo nhưng không dùng. Giữ code sạch.
+    "noUnusedLocals": true,
+
+    // Báo lỗi tham số hàm không dùng. Nếu chủ ý không dùng, đặt tên bắt đầu bằng "_".
+    "noUnusedParameters": true,
+
+    // Mọi nhánh code trong hàm có return type phải return tường minh.
+    "noImplicitReturns": true,
+
+    // Bắt lỗi "fallthrough" trong switch (quên break).
+    "noFallthroughCasesInSwitch": true,
+
+    // CỰC KỲ HỮU ÍCH cho code Node:
+    // arr[0] sẽ có type "T | undefined" thay vì "T".
+    // Bắt bạn phải kiểm tra trước khi dùng — tránh lỗi runtime kinh điển.
+    "noUncheckedIndexedAccess": true,
+
+    // Khi override method của class cha, phải viết keyword "override".
+    // Tránh lỗi do parent method bị đổi tên mà child không biết.
+    "noImplicitOverride": true,
+
+    // Cấm code không thể chạy tới (sau return, throw...).
+    "allowUnreachableCode": false,
+
+    // Cấm label không dùng (dạng "myLabel: for(...)").
+    "allowUnusedLabels": false,
+
+    // OPTIONAL — Bật khi cứng tay hơn:
+    // Phân biệt giữa "không có property" và "có property = undefined".
+    // Hơi đau khi mới học, có thể bật sau.
+    // "exactOptionalPropertyTypes": true,
+
+    // ─────────────────────────────────────────────────────────
+    //  6) EMIT — Cấu hình file output
+    // ─────────────────────────────────────────────────────────
+
+    // Sinh source map (.js.map) để debugger ánh xạ về file .ts gốc.
+    // Bắt buộc nếu bạn muốn debug TS bằng VSCode/Chrome DevTools.
+    "sourceMap": true,
+
+    // Sinh file .d.ts — CHỈ cần khi bạn publish package npm cho người khác dùng.
+    // Với API server thì không cần, để false cho build nhẹ.
+    "declaration": false,
+
+    // Giữ lại comment trong file .js output. Để false nếu muốn dist gọn hơn.
+    "removeComments": false,
+
+    // Build tăng tiến — lần sau chỉ compile lại file đã đổi → build nhanh hơn.
+    // Sinh file .tsbuildinfo, nhớ thêm vào .gitignore.
+    "incremental": true,
+
+    // ─────────────────────────────────────────────────────────
+    //  7) PERFORMANCE & MISC
+    // ─────────────────────────────────────────────────────────
+
+    // Bỏ qua type-check các file .d.ts trong node_modules.
+    // Tăng tốc build rất nhiều, và tránh lỗi do type của thư viện bên ngoài viết kém.
+    "skipLibCheck": true,
+
+    // Cho phép import file .js trong project TS (nếu có code legacy).
+    // Mặc định false. Bật khi cần migrate dần.
+    "allowJs": false,
+
+    // Cảnh báo các "feature" có thể gây lỗi tinh tế.
+    "useUnknownInCatchVariables": true   // "catch (e)" → e có type "unknown" thay vì "any"
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  //  Files mà TS sẽ compile.
+  // ─────────────────────────────────────────────────────────────
+  "include": ["src/**/*"],
+
+  // Files bỏ qua hoàn toàn (KHÔNG compile, KHÔNG type-check).
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ],
+
+  // ─────────────────────────────────────────────────────────────
+  //  Cấu hình riêng cho ts-node / ts-node-dev khi chạy "dev" mode.
+  // ─────────────────────────────────────────────────────────────
+  "ts-node": {
+    // Skip type-check khi chạy dev → restart cực nhanh.
+    // Type-check vẫn được làm bởi VSCode + lệnh "tsc --noEmit".
+    "transpileOnly": true,
+    "files": true
+  }
+}

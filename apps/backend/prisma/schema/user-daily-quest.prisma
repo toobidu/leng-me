@@ -1,0 +1,19 @@
+// ============================================================
+//  MODEL UserDailyQuest  →  bảng "user_daily_quests"
+// ============================================================
+model UserDailyQuest {
+  id            Int       @id @default(autoincrement())
+  user_id       Int
+  quest_id      Int
+  assigned_date DateTime  @default(now()) @db.Date
+  progress      Int       @default(0)
+  is_completed  Boolean   @default(false)
+  completed_at  DateTime?
+
+  user  User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  quest DailyQuest @relation(fields: [quest_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, quest_id, assigned_date])
+  @@index([user_id, assigned_date])
+  @@map("user_daily_quests")
+}

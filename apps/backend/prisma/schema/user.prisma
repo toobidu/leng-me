@@ -1,0 +1,55 @@
+// ============================================================
+//  MODEL User  →  bảng "users"
+// ============================================================
+//  Đây là model "trung tâm" — bị rất nhiều bảng tham chiếu tới,
+//  nên có nhiều back-relation. Mỗi mảng dưới đây KHÔNG tạo cột,
+//  chỉ là "cửa sổ" để Prisma đi ngược quan hệ.
+// ============================================================
+model User {
+  id                 Int       @id @default(autoincrement())
+  username           String    @unique @db.VarChar(50)
+  password_hash      String    @db.VarChar(255)
+  email              String?   @unique @db.VarChar(100)
+  email_verified     Boolean   @default(false)
+  phone_number       String?   @unique @db.VarChar(20)
+  level              Int       @default(1)
+  exp_to_next_level  Int       @default(100)
+  total_exp          Int       @default(0)
+  exp_points         Int       @default(0)
+  coin_balance       Int       @default(0) // CHECK (>= 0) — thêm ở migration tay (xem README cuối)
+  streak_days        Int       @default(0)
+  last_login_at      DateTime?
+  is_active          Boolean   @default(true) // FALSE = banned
+  current_title_id   Int?
+  active_cosmetic_id Int?
+  created_at         DateTime  @default(now())
+
+  // ─── Forward relations (giữ FK, ON DELETE SET NULL) ───────
+  current_title   Achievement? @relation(fields: [current_title_id], references: [id], onDelete: SetNull)
+  active_cosmetic Cosmetic?    @relation(fields: [active_cosmetic_id], references: [id], onDelete: SetNull)
+
+  // ─── Back relations ───────────────────────────────────────
+  // UserRole tham chiếu User 2 lần (user_id + assigned_by) → BẮT BUỘC đặt tên quan hệ
+  user_roles          UserRole[] @relation("UserRoleMember")
+  assigned_user_roles UserRole[] @relation("UserRoleAssignedBy")
+
+  reviewed_recipes  Recipe[] // recipes.reviewed_by
+  unlocked_words    UserUnlockedWord[]
+  board_states      BoardState[]
+  achievements      UserAchievement[]
+  daily_quests      UserDailyQuest[]
+  coin_transactions CoinTransaction[]
+  cosmetics         UserCosmetic[]
+  refresh_tokens    RefreshToken[]
+  audit_logs        AuditLog[] // audit_logs.actor_id
+  word_progress     UserWordProgress[]
+  study_sessions    StudySession[]
+  review_logs       ReviewLog[]
+  word_notes        UserWordNote[]
+  fusion_events     FusionEvent[]
+  email_tokens      EmailVerificationToken[]
+  password_resets   PasswordResetToken[]
+
+  @@index([exp_points]) // leaderboard
+  @@map("users")
+}

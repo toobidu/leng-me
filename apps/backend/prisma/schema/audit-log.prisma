@@ -1,0 +1,22 @@
+// ============================================================
+//  MODEL AuditLog  →  bảng "audit_logs"  (admin action trail)
+//  id BigInt vì volume lớn theo thời gian.
+// ============================================================
+model AuditLog {
+  id          BigInt   @id @default(autoincrement())
+  actor_id    Int? // ON DELETE SET NULL
+  action      String   @db.VarChar(100) // 'USER_BAN','RECIPE_APPROVE','ROLE_ASSIGN'...
+  target_type String?  @db.VarChar(50) // 'USER','RECIPE','WORD','ROLE'
+  target_id   Int?
+  old_value   Json?
+  new_value   Json?
+  ip_address  String?  @db.VarChar(45)
+  created_at  DateTime @default(now())
+
+  actor User? @relation(fields: [actor_id], references: [id], onDelete: SetNull)
+
+  @@index([actor_id])
+  @@index([action])
+  @@index([target_type, target_id])
+  @@map("audit_logs")
+}

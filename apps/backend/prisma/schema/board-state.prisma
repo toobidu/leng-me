@@ -1,0 +1,20 @@
+// ============================================================
+//  MODEL BoardState  →  bảng "board_states"
+//  Mỗi row = 1 card đang nằm trên board kéo-thả của user.
+// ============================================================
+model BoardState {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  word_id    Int
+  slot_index Int      @db.SmallInt
+  pos_x      Int      @default(0) @db.SmallInt
+  pos_y      Int      @default(0) @db.SmallInt
+  updated_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  word Word @relation(fields: [word_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, slot_index])
+  @@index([user_id])
+  @@map("board_states")
+}

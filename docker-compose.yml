@@ -1,0 +1,40 @@
+# ============================================================
+#  PostgreSQL container — DÙNG CHUNG cho nhiều project dev
+# ============================================================
+#  Triết lý: 1 container Postgres duy nhất, mỗi project tạo
+#  database riêng bên trong. Tiết kiệm RAM, dễ quản lý.
+#
+#  Cách reuse cho project khác:
+#    1. Copy file docker-compose.yml này sang project mới (HOẶC dùng chung)
+#    2. Thêm 1 dòng `CREATE DATABASE <ten_project>;` vào
+#       docker/postgres/init/01-init-db.sql (chỉ chạy lần đầu)
+#       HOẶC chạy lệnh:
+#         docker exec -it postgres-dev psql -U dev -c "CREATE DATABASE other_app"
+#    3. Update DATABASE_URL trong .env của project mới
+# ============================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine             # Pin version — postgres 18+ đổi cấu trúc mount, gây lỗi với volume hiện tại
+    container_name: postgres-dev          # Tên cố định để các project chung nhận ra
+    restart: unless-stopped               # Tự restart trừ khi mình stop tay
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres               # DB mặc định (không dùng cho app nào cả)
+    ports:
+      - "5432:5432"                       # Map ra host để app Node bên ngoài kết nối
+    volumes:
+      # Volume persist data — KHÔNG mất data khi xóa container
+      - pg_dev_data:/var/lib/postgresql/data
+      # Init scripts CHỈ chạy 1 lần đầu (khi volume còn rỗng)
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg_dev_data:
+    name: pg_dev_data                     # Tên cố định → các project dùng chung volume

@@ -1,0 +1,17 @@
+// ============================================================
+//  MODEL UserWordNote  →  bảng "user_word_notes"
+//  Ghi chú cá nhân + đánh dấu yêu thích cho từng từ.
+// ============================================================
+model UserWordNote {
+  user_id     Int
+  word_id     Int
+  note        String?  @db.Text
+  is_favorite Boolean  @default(false)
+  updated_at  DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  word Word @relation(fields: [word_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, word_id])
+  @@map("user_word_notes")
+}

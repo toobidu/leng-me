@@ -1,0 +1,17 @@
+// ============================================================
+//  MODEL UserAchievement  →  bảng "user_achievements"  (progress tracking)
+// ============================================================
+model UserAchievement {
+  user_id          Int
+  achievement_id   Int
+  progress_current Int       @default(0)
+  progress_target  Int       @default(1)
+  unlocked_at      DateTime? // NULL = chưa hoàn thành
+
+  user        User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievement_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, achievement_id])
+  @@index([user_id])
+  @@map("user_achievements")
+}

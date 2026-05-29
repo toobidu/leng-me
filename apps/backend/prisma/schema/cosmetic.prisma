@@ -1,0 +1,19 @@
+// ============================================================
+//  MODEL Cosmetic  →  bảng "cosmetics"
+// ============================================================
+model Cosmetic {
+  id           Int          @id @default(autoincrement())
+  name         String       @db.VarChar(100)
+  type         CosmeticType
+  description  String?      @db.Text
+  preview_url  String?      @db.VarChar(512)
+  price_coins  Int          @default(0) // CHECK (>= 0) — migration tay
+  is_available Boolean      @default(true)
+  created_at   DateTime     @default(now())
+
+  // users.active_cosmetic_id trỏ về đây
+  active_users   User[]
+  user_cosmetics UserCosmetic[]
+
+  @@map("cosmetics")
+}
