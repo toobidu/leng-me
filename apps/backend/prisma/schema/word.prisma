@@ -18,7 +18,10 @@ model Word {
   image_url       String?   @db.VarChar(512)
   audio_url       String?   @db.VarChar(512)
   effect_tag      String?   @db.VarChar(50)
-  created_at      DateTime  @default(now())
+  created_at      DateTime  @default(now()) @db.Timestamptz()
+  updated_at      DateTime  @default(now()) @updatedAt @db.Timestamptz()
+  created_by      String?   @db.VarChar(50)
+  updated_by      String?   @db.VarChar(50)
   // CHECK chk_intermediate_display: NOT (is_intermediate AND display_in_book) — migration tay
 
   // ─── Recipe tham chiếu Word 3 LẦN → bắt buộc đặt tên quan hệ ──

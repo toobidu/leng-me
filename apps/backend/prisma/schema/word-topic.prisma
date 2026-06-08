@@ -3,9 +3,13 @@
 //  Nhiều topic trên một từ ('weather','business','courage'...)
 // ============================================================
 model WordTopic {
-  id      Int    @id @default(autoincrement())
-  word_id Int
-  topic   String @db.VarChar(50)
+  id         Int      @id @default(autoincrement())
+  word_id    Int
+  topic      String   @db.VarChar(50)
+  created_at DateTime @default(now()) @db.Timestamptz()
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz()
+  created_by String?  @db.VarChar(50)
+  updated_by String?  @db.VarChar(50)
 
   word Word @relation(fields: [word_id], references: [id], onDelete: Cascade)
 

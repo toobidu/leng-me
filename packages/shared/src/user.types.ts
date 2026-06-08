@@ -9,8 +9,8 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  createdAt: string; // ISO string khi qua JSON
-  updatedAt: string;
+  created_at: string; // ISO string khi qua JSON
+  updated_at: string;
 }
 
 export interface CreateUserDto {

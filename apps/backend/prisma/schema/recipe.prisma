@@ -14,7 +14,10 @@ model Recipe {
   use_count       Int          @default(0)
   reviewed_by     Int?
   reviewed_at     DateTime?
-  created_at      DateTime     @default(now())
+  created_at      DateTime     @default(now()) @db.Timestamptz()
+  updated_at      DateTime     @default(now()) @updatedAt @db.Timestamptz()
+  created_by      String?      @db.VarChar(50)
+  updated_by      String?      @db.VarChar(50)
   // CHECK (ingredient_1_id < ingredient_2_id) — migration tay
 
   ingredient_1 Word  @relation("Ingredient1", fields: [ingredient_1_id], references: [id], onDelete: Cascade)

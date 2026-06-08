@@ -17,7 +17,7 @@ export class UserService {
     return this.http.get<User[]>(this.base);
   }
 
-  getById(id: string) {
+  get_by_id(id: string) {
     return this.http.get<User>(`${this.base}/${id}`);
   }
 

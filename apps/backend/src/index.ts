@@ -3,16 +3,16 @@
 // ============================================================
 //  ≈ public static void main() + @SpringBootApplication.
 // ============================================================
-import { createApp } from './app';
+import { create_app } from './app';
 import { env } from '@/config/env.config';
 import { prisma } from '@/lib/prisma';
 
-const app = createApp();
+const app = create_app();
 
 const server = app.listen(env.PORT, () => {
   console.log(`Server đang chạy: http://localhost:${env.PORT}`);
   console.log(`Health check:    http://localhost:${env.PORT}/health`);
-  console.log(`Users API:       http://localhost:${env.PORT}/api/users`);
+  console.log(`Auth API:        http://localhost:${env.PORT}/api/auth`);
 });
 
 // ─── Graceful shutdown ─────────────────────────────────────

@@ -9,6 +9,10 @@ model UserRole {
   role_id     Int
   assigned_at DateTime @default(now())
   assigned_by Int? // Admin nào gán (ON DELETE SET NULL)
+  created_at  DateTime @default(now()) @db.Timestamptz()
+  updated_at  DateTime @default(now()) @updatedAt @db.Timestamptz()
+  created_by  String?  @db.VarChar(50)
+  updated_by  String?  @db.VarChar(50)
 
   user     User  @relation("UserRoleMember", fields: [user_id], references: [id], onDelete: Cascade)
   role     Role  @relation(fields: [role_id], references: [id], onDelete: Cascade)

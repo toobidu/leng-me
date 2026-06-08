@@ -8,7 +8,10 @@ model Achievement {
   icon_url           String?  @db.VarChar(512)
   req_condition_json Json // {"type":"total_unlocked","count":N} ...
   is_title_reward    Boolean  @default(false)
-  created_at         DateTime @default(now())
+  created_at         DateTime @default(now()) @db.Timestamptz()
+  updated_at         DateTime @default(now()) @updatedAt @db.Timestamptz()
+  created_by         String?  @db.VarChar(50)
+  updated_by         String?  @db.VarChar(50)
 
   // users.current_title_id trỏ về đây (title đang gắn)
   title_holders     User[]

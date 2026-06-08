@@ -9,7 +9,10 @@ model BoardState {
   slot_index Int      @db.SmallInt
   pos_x      Int      @default(0) @db.SmallInt
   pos_y      Int      @default(0) @db.SmallInt
-  updated_at DateTime @default(now())
+  created_at DateTime @default(now()) @db.Timestamptz()
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz()
+  created_by String?  @db.VarChar(50)
+  updated_by String?  @db.VarChar(50)
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   word Word @relation(fields: [word_id], references: [id], onDelete: Cascade)

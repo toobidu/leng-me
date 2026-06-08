@@ -3,6 +3,12 @@
 //  Tên enum: PascalCase + @@map về tên type snake_case dưới DB.
 //  Giá trị: giữ nguyên UPPER_CASE khớp y hệt SQL.
 // ============================================================
+enum Gender {
+  MALE
+  FEMALE
+
+  @@map("gender")
+}
 
 enum CefrLevel {
   A1

@@ -16,7 +16,7 @@ import { Prisma } from '@prisma/client';
 import { HttpError } from '@/utils/http-error';
 import { env } from '@/config/env.config';
 
-export const errorMiddleware: ErrorRequestHandler = (err, _req, res, _next) => {
+export const error_middleware: ErrorRequestHandler = (err, _req, res, _next) => {
   // 1) Error mình tự throw — luôn có status rõ ràng
   if (err instanceof HttpError) {
     res.status(err.status).json({

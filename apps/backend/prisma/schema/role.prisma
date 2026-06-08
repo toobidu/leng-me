@@ -6,7 +6,10 @@ model Role {
   name        String   @unique @db.VarChar(50) // 'ADMIN' | 'USER' | 'CONTENT_EDITOR' | 'MODERATOR'
   description String?  @db.Text
   is_active   Boolean  @default(true)
-  created_at  DateTime @default(now())
+  created_at  DateTime @default(now()) @db.Timestamptz()
+  updated_at  DateTime @default(now()) @updatedAt @db.Timestamptz()
+  created_by  String?  @db.VarChar(50)
+  updated_by  String?  @db.VarChar(50)
 
   // Back-relation M-N qua bảng nối UserRole (Role bị tham chiếu 1 lần → không cần đặt tên)
   user_roles UserRole[]

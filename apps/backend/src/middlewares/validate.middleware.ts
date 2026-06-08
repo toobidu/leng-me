@@ -1,7 +1,7 @@
 // ============================================================
 //  VALIDATE MIDDLEWARE — validate req.body bằng Zod schema
 // ============================================================
-//  Dùng:  router.post('/', validateBody(schema), controller.create)
+//  Dùng:  router.post('/', validate_body(schema), controller.create)
 //
 //  Nếu hợp lệ → ghi đè req.body bằng data đã parse (đã coerce kiểu),
 //  rồi gọi next(). Nếu fail → throw HttpError 400 → ErrorMiddleware bắt.
@@ -12,7 +12,7 @@ import type { Request, Response, NextFunction } from 'express';
 import type { ZodType } from 'zod';
 import { HttpError } from '@/utils/http-error';
 
-export const validateBody =
+export const validate_body =
   <T>(schema: ZodType<T>) =>
   (req: Request, _res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);

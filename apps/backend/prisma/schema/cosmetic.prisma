@@ -9,7 +9,10 @@ model Cosmetic {
   preview_url  String?      @db.VarChar(512)
   price_coins  Int          @default(0) // CHECK (>= 0) — migration tay
   is_available Boolean      @default(true)
-  created_at   DateTime     @default(now())
+  created_at   DateTime     @default(now()) @db.Timestamptz()
+  updated_at   DateTime     @default(now()) @updatedAt @db.Timestamptz()
+  created_by   String?      @db.VarChar(50)
+  updated_by   String?      @db.VarChar(50)
 
   // users.active_cosmetic_id trỏ về đây
   active_users   User[]

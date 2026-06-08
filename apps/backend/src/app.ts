@@ -1,8 +1,8 @@
 // ============================================================
 //  APP FACTORY — tạo Express app
 // ============================================================
-//  Tách createApp() ra khỏi index.ts giúp:
-//    • Test integration dễ (test gọi createApp() rồi supertest).
+//  Tách create_app() ra khỏi index.ts giúp:
+//    • Test integration dễ (test gọi create_app() rồi supertest).
 //    • Tách concerns: file này define "app là gì",
 //                     index.ts lo "khởi động server".
 //
@@ -14,11 +14,11 @@
 //    5. Error middleware (PHẢI ĐẶT CUỐI CÙNG)
 // ============================================================
 import express, { type Express } from 'express';
-import { userRouter } from '@/modules/user/user.routes';
-import { errorMiddleware } from '@/middlewares/error.middleware';
+import { auth_router } from '@/modules/auth/auth.routes';
+import { error_middleware } from '@/middlewares/error.middleware';
 import { HttpError } from '@/utils/http-error';
 
-export const createApp = (): Express => {
+export const create_app = (): Express => {
   const app = express();
 
   // ─── Parsers ──────────────────────────────────────────────
@@ -31,7 +31,7 @@ export const createApp = (): Express => {
   });
 
   // ─── Feature routers ──────────────────────────────────────
-  app.use('/api/users', userRouter);
+  app.use('/api/auth', auth_router);
 
   // ─── 404 cho mọi route không match ────────────────────────
   app.use((req, _res, next) => {
@@ -39,7 +39,7 @@ export const createApp = (): Express => {
   });
 
   // ─── Error handler (LUÔN CUỐI) ────────────────────────────
-  app.use(errorMiddleware);
+  app.use(error_middleware);
 
   return app;
 };

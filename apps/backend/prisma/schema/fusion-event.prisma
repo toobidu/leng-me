@@ -8,7 +8,10 @@ model FusionEvent {
   recipe_id     Int? // ON DELETE SET NULL
   result_id     Int
   is_first_time Boolean  @default(false)
-  created_at    DateTime @default(now())
+  created_at    DateTime @default(now()) @db.Timestamptz()
+  updated_at    DateTime @default(now()) @updatedAt @db.Timestamptz()
+  created_by    String?  @db.VarChar(50)
+  updated_by    String?  @db.VarChar(50)
 
   user   User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   recipe Recipe? @relation(fields: [recipe_id], references: [id], onDelete: SetNull)

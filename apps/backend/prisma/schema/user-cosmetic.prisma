@@ -5,6 +5,10 @@ model UserCosmetic {
   user_id     Int
   cosmetic_id Int
   acquired_at DateTime @default(now())
+  created_at  DateTime @default(now()) @db.Timestamptz()
+  updated_at  DateTime @default(now()) @updatedAt @db.Timestamptz()
+  created_by  String?  @db.VarChar(50)
+  updated_by  String?  @db.VarChar(50)
 
   user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   cosmetic Cosmetic @relation(fields: [cosmetic_id], references: [id], onDelete: Cascade)
