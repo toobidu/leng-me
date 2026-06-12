@@ -1,13 +1,3 @@
-// ============================================================
-//  VALIDATE MIDDLEWARE — validate req.body bằng Zod schema
-// ============================================================
-//  Dùng:  router.post('/', validate_body(schema), controller.create)
-//
-//  Nếu hợp lệ → ghi đè req.body bằng data đã parse (đã coerce kiểu),
-//  rồi gọi next(). Nếu fail → throw HttpError 400 → ErrorMiddleware bắt.
-//
-//  ≈ @Valid + @RequestBody trong Spring Boot.
-// ============================================================
 import type { Request, Response, NextFunction } from 'express';
 import type { ZodType } from 'zod';
 import { HttpError } from '@/utils/http-error';

@@ -1,10 +1,4 @@
-// ============================================================
-//  MODEL User  →  bảng "users"
-// ============================================================
-//  Đây là model "trung tâm" — bị rất nhiều bảng tham chiếu tới,
-//  nên có nhiều back-relation. Mỗi mảng dưới đây KHÔNG tạo cột,
-//  chỉ là "cửa sổ" để Prisma đi ngược quan hệ.
-// ============================================================
+// Bảng User
 model User {
   id                 Int       @id @default(autoincrement())
   username           String    @unique @db.VarChar(50)

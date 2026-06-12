@@ -1,20 +1,3 @@
-// ============================================================
-//  TOKENS — Access token (JWT) + Refresh token (opaque, băm SHA-256)
-// ============================================================
-//  Chiến lược 2 token (chuẩn production):
-//
-//    • ACCESS TOKEN  : JWT ngắn hạn (15m). Client gửi kèm mỗi request
-//                      qua header "Authorization: Bearer <token>".
-//                      Server chỉ verify chữ ký, KHÔNG cần query DB.
-//
-//    • REFRESH TOKEN : chuỗi random dài hạn (7 ngày). KHÔNG phải JWT,
-//                      chỉ là 32 byte random. Server lưu BẢN BĂM (SHA-256)
-//                      vào bảng refresh_tokens → kể cả DB bị lộ cũng
-//                      không dùng được. Dùng để xin access token mới.
-//
-//  ≈ Spring Security: access token như JWT filter, refresh token như
-//    persistent token store.
-// ============================================================
 import crypto from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import { env } from '@/config/env.config';
